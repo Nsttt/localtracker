@@ -1,10 +1,11 @@
 {
-  "name": "covid-api",
+  "name": "anitracker-api",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start": "nodemon -w src --ext ts --exec ts-node src/index.ts",
+    "dev": "nodemon -w src --ext ts --exec ts-node src/index.ts",
     "lint": "eslint . --ext .ts,.js,.tsx,.jsx",
     "fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix"
   },
@@ -20,16 +21,20 @@
     ]
   },
   "dependencies": {
-    "apollo-server": "^3.0.2",
+    "apollo-server-koa": "^3.0.2",
     "class-validator": "^0.13.1",
     "graphql": "^15.5.1",
+    "koa": "^2.13.1",
     "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.2",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@types/graphql": "^14.5.0",
+    "@types/node": "^16.4.2",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "eslint": "^7.31.0",
