@@ -1,19 +1,39 @@
 import 'reflect-metadata';
-import Koa from 'koa';
-import { ApolloServer } from 'apollo-server-koa';
+import express from 'express';
+import session from 'express-session';
+import cors from 'cors';
+import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import { buildSchema } from 'type-graphql';
-import { AnimeResolver } from './resolvers/AnimeResolver';
+import { RegisterResolver } from './modules/user/CreateUser';
 
 export default async function main() {
-  const connection = await createConnection();
+  await createConnection();
+
   const schema = await buildSchema({
-    resolvers: [AnimeResolver],
+    resolvers: [RegisterResolver],
   });
   const server = new ApolloServer({ schema });
   await server.start();
 
-  const app = new Koa();
+  const app = express();
+  app.use(cors({
+    credentials: true,
+    origin: process.env.front_uri,
+  }))
+  app.use(session({
+    store: ,
+    name: 'qid',
+    secret: "test",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 1000 * 60 * 60 * 24 * 7 * 365, // 7 years
+    }
+  }));
+
   server.applyMiddleware({ app });
 
   await app.listen({ port: process.env.API_PORT || 4000 }),
