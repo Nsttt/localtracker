@@ -1,18 +1,18 @@
 import { Field, ObjectType, ID, Int } from 'type-graphql';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
 @ObjectType()
+@Entity()
 export class Anime extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Field()
   @Column()
   title: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   idMal: number;
 
@@ -60,17 +60,17 @@ export class Anime extends BaseEntity {
   @Column('int')
   volumes: number;
 
-  @Field()
-  @Column()
-  isAdult: Boolean;
+  @Field(() => Boolean)
+  @Column({ default: false})
+  isAdult: boolean;
 
   @Field()
   @Column()
-  genre: String;
+  genre: string;
 
   @Field()
   @Column()
-  tag: String;
+  tag: string;
 
   @Field((type) => Int)
   @Column('int')
@@ -78,15 +78,15 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  tagCategory: String;
+  tagCategory: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false})
+  onList: boolean;
 
   @Field()
   @Column()
-  onList: Boolean;
-
-  @Field()
-  @Column()
-  licensedBy: String;
+  licensedBy: string;
 
   @Field((type) => Int)
   @Column('int')
@@ -106,7 +106,7 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  search: String;
+  search: string;
 
   @Field((type) => Int)
   @Column('int')
@@ -142,7 +142,7 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  startDate_like: String;
+  startDate_like: string;
 
   @Field()
   @Column()
@@ -154,7 +154,7 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  endDate_like: String;
+  endDate_like: string;
 
   @Field()
   @Column()
@@ -180,87 +180,87 @@ export class Anime extends BaseEntity {
   @Column()
   status_not_in: [];
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   episodes_greater: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   episodes_lesser: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   duration_greater: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   duration_lesser: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   chapters_greater: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   chapters_lesser: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   volumes_greater: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   volumes_lesser: number;
 
   @Field()
   @Column()
-  genre_in: [String];
+  genre_in: [string];
 
   @Field()
   @Column()
-  genre_not_in: [String];
+  genre_not_in: [string];
 
   @Field()
   @Column()
-  tag_in: [String];
+  tag_in: [string];
 
   @Field()
   @Column()
-  tag_not_in: [String];
+  tag_not_in: [string];
 
   @Field()
   @Column()
-  tagCategory_in: [String];
+  tagCategory_in: [string];
 
   @Field()
   @Column()
-  tagCategory_not_in: [String];
+  tagCategory_not_in: [string];
 
   @Field()
   @Column()
-  licensedBy_in: [String];
+  licensedBy_in: [string];
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   averageScore_not: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   averageScore_greater: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   averageScore_lesser: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   popularity_not: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   popularity_greater: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   popularity_lesser: number;
 
