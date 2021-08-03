@@ -8,9 +8,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
-    "rootDir": "src",
-    "baseUrl": "."
   },
-  "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts"]
+  "exclude": ["node_modules"]
 }

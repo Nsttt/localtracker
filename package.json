@@ -1,13 +1,18 @@
 {
-  "name": "anitracker-api",
+  "name": "localtracker",
   "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "index.js",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "start": "nodemon -w src --ext ts --exec ts-node src/index.ts",
-    "dev": "ts-node-dev --respawn src/index.ts",
-    "lint": "eslint . --ext .ts,.js,.tsx,.jsx",
-    "fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix"
+    "setup": "yarn install && lerna bootstrap",
+    "api": "yarn workspace @localtracker/api",
+    "api:dev": "yarn api dev",
+    "lint": "lerna run lint",
+    "fix": "lerna run fix"
   },
   "husky": {
     "hooks": {
@@ -20,20 +25,8 @@
       "git add --force"
     ]
   },
-  "dependencies": {
-    "apollo-server-express": "^3.0.2",
-    "bcryptjs": "^2.4.3",
-    "class-validator": "^0.13.1",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-session": "^1.17.2",
-    "graphql": "^15.5.1",
-    "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.0.2",
-    "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.34"
-  },
   "devDependencies": {
+    "lerna": "^4.0.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@types/bcryptjs": "^2.4.2",
