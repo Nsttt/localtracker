@@ -8,22 +8,19 @@ import { buildSchema } from 'type-graphql';
 import connectRedis from 'connect-redis';
 
 import { redis } from './redis';
-import { MeResolver } from './modules/user/Me';
-import { LoginResolver } from './modules/user/Login';
-import { RegisterResolver } from './modules/user/CreateUser';
 
 export default async function main() {
   await createConnection();
 
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver, MeResolver],
+    resolvers: [__dirname + '/modules/**/*.ts'],
     authChecker: ({ context: { req } }) => {
       return !!req.session.userId;
     },
   });
   const server = new ApolloServer({
     schema,
-    context: ({ req }: any) => ({ req }),
+    context: ({ req, res }: any) => ({ req }),
   });
   await server.start();
 
