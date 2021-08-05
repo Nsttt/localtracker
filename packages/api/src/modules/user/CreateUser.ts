@@ -1,4 +1,4 @@
-import { isAuth } from './../../middlewares/isAuth';
+import { isAuth } from '../middlewares/isAuth';
 import { RegisterInput } from './register/RegisterInput';
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import bcrypt from 'bcryptjs';

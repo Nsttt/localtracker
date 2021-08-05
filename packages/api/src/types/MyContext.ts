@@ -6,9 +6,9 @@ export interface MyContext {
       userId?: any;
     };
   };
-  // res: Response & {
-  //   session: {
-  //     userId?: any;
-  //   };
-  // };
+  res: Response & {
+    session: {
+      userId?: any;
+    };
+  };
 }
