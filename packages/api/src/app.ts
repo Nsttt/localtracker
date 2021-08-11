@@ -12,10 +12,11 @@ import { redis } from './redis';
 export default async function main() {
   await createConnection();
 
-  const schema = createSchema();
+  const schema = await createSchema();
   const server = new ApolloServer({
     schema,
     context: ({ req, res }: any) => ({ req, res }),
+    
   });
   await server.start();
 
@@ -47,8 +48,9 @@ export default async function main() {
 
   server.applyMiddleware({ app });
 
-  await app.listen({ port: process.env.API_PORT || 4000 }),
+  app.listen({ port: process.env.API_PORT || 4000 }, () => {
     console.log(`Server ready at http://localhost:4000${server.graphqlPath}`);
+  });
 
   return { server, app };
 }
