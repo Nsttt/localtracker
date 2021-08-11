@@ -1,7 +1,7 @@
-import { isAuth } from '../middlewares/isAuth';
-import { RegisterInput } from './register/RegisterInput';
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import bcrypt from 'bcryptjs';
+import { isAuth } from '../middlewares/isAuth';
+import { RegisterInput } from './register/RegisterInput';
 
 import { User } from '../../entities/User';
 
@@ -13,7 +13,7 @@ export class RegisterResolver {
     return 'hello';
   }
 
-  @Mutation(() => String)
+  @Mutation(() => User)
   async register(
     @Arg('data') { name, username, password }: RegisterInput,
   ): Promise<User> {
