@@ -1,5 +1,5 @@
-import { MyContext } from './../../types/MyContext';
 import { Ctx, Mutation, Resolver } from 'type-graphql';
+import { MyContext } from '../../types/MyContext';
 
 @Resolver()
 export class LogoutResolver {
@@ -8,7 +8,7 @@ export class LogoutResolver {
     return new Promise((res, rej) =>
       ctx.req.session!.destroy((err) => {
         if (err) {
-          console.log(err);
+          console.error("Error:", err)
           return rej(false);
         }
 
