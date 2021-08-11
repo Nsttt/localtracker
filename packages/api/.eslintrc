@@ -14,6 +14,8 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "prefer-promise-reject-errors": "off"
   }
 }
