@@ -4,23 +4,18 @@ import session from 'express-session';
 import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
-import { buildSchema } from 'type-graphql';
 import connectRedis from 'connect-redis';
 
+import { createSchema } from './utils/createSchema';
 import { redis } from './redis';
 
 export default async function main() {
   await createConnection();
 
-  const schema = await buildSchema({
-    resolvers: [__dirname + '/modules/**/*.ts'],
-    authChecker: ({ context: { req } }) => {
-      return !!req.session.userId;
-    },
-  });
+  const schema = createSchema();
   const server = new ApolloServer({
     schema,
-    context: ({ req, res }: any) => ({ req }),
+    context: ({ req, res }: any) => ({ req, res }),
   });
   await server.start();
 
