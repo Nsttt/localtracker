@@ -4,7 +4,7 @@ export const testConn = (drop: boolean = false) =>
   createConnection({
     type: 'sqlite',
     database: './db-test.sqlite3',
-    entities: ['src/entities/*.ts'],
+    entities: [`${__dirname}../../entities/*.*`],
     synchronize: drop,
     dropSchema: drop,
   });
