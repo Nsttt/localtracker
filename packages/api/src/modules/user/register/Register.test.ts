@@ -49,10 +49,14 @@ describe('Register', () => {
 
     const userFromDB = await User.findOne({
       where: {
+        name: user.name,
         username: user.username,
+        password: user.password,
       },
     });
     expect(userFromDB).toBeDefined();
+    expect(userFromDB!.username).toBe(user.username);
     expect(userFromDB!.name).toBe(user.name);
+    expect(userFromDB!.password).toBe(user.password);
   });
 });
