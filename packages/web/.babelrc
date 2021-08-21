@@ -7,7 +7,8 @@
         "libraryName": "@material-ui/core",
         "libraryDirectory": "",
         "camel2DashComponentName": false
-      }
+      },
+      "Core"
     ],
     [
       "babel-plugin-import",
@@ -15,7 +16,8 @@
         "libraryName": "@material-ui/icons",
         "libraryDirectory": "",
         "camel2DashComponentName": false
-      }
+      },
+      "Icons"
     ]
   ]
 }

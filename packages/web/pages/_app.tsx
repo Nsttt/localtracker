@@ -1,8 +1,10 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { CssBaseline } from "@material-ui/core";
+
 import { useApollo } from "../hooks/useApollo";
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
 import theme from "../styles/theme";
 
