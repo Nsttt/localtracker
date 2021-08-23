@@ -10,7 +10,9 @@
   "scripts": {
     "setup": "yarn install && lerna bootstrap",
     "api": "yarn workspace @localtracker/api",
+    "web": "yarn workspace @localtracker/web",
     "api:dev": "yarn api dev",
+    "web:dev": "yarn web dev",
     "lint": "lerna run lint",
     "fix": "lerna run fix"
   },
