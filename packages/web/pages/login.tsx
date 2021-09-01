@@ -2,8 +2,8 @@ import type { NextPage } from 'next';
 import { Container, Typography } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-import Header from '../components/Header';
-import Form from '../components/Form';
+import Header from '../components/Header/header';
+import Form from '../components/Form/form';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const LogIn: NextPage = () => {
+const LoginPage: NextPage = () => {
   const classes = useStyles();
 
   return (
@@ -27,11 +27,11 @@ const LogIn: NextPage = () => {
           <Typography component="h1" variant="h4">
             Log in
           </Typography>
-          <Form formType="login"/>
+          <Form formType="login" />
         </div>
       </Container>
     </>
   );
 };
 
-export default LogIn;
+export default LoginPage;
