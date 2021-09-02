@@ -3,8 +3,9 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 export const useCardStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      minWidth: 275,
       marginTop: theme.spacing(1),
+      width: 210,
+      height: 315,
     },
     bullet: {
       display: 'inline-block',
@@ -17,5 +18,6 @@ export const useCardStyles = makeStyles((theme: Theme) =>
     pos: {
       marginBottom: 12,
     },
+    card: {},
   }),
 );

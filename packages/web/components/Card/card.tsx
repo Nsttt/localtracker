@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { Button, Card as BaseCard, CardActions, CardContent, Typography } from '@material-ui/core';
+import { Button, Paper, CardActions, CardContent, Typography } from '@material-ui/core';
 
 import { useCardStyles } from './card.styles';
 
@@ -9,11 +9,5 @@ interface props {
 
 export const Card: FunctionComponent<props> = () => {
   const classes = useCardStyles();
-  return (
-    <BaseCard className={classes.root}>
-      <CardContent>
-
-      </CardContent>
-    </BaseCard>
-  );
+  return <Paper className={classes.root}></Paper>;
 };
