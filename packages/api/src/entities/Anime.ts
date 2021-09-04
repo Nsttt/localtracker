@@ -18,50 +18,50 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  startDate: ;
+  startDate: number;
 
   @Field()
   @Column()
-  endDate: ;
+  endDate: number;
 
   @Field()
   @Column()
-  season: ;
+  season: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   seasonYear: number;
 
   @Field()
   @Column()
-  type: ;
+  type: string;
 
   @Field()
   @Column()
-  format: ;
+  format: string;
 
   @Field()
   @Column()
-  status: ;
+  status: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   episodes: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   duration: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   chapters: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   volumes: number;
 
   @Field(() => Boolean)
-  @Column({ default: false})
+  @Column({ default: false })
   isAdult: boolean;
 
   @Field()
@@ -72,7 +72,7 @@ export class Anime extends BaseEntity {
   @Column()
   tag: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   minimumTagRank: number;
 
@@ -81,64 +81,64 @@ export class Anime extends BaseEntity {
   tagCategory: string;
 
   @Field(() => Boolean)
-  @Column({ default: false})
+  @Column({ default: false })
   onList: boolean;
 
   @Field()
   @Column()
   licensedBy: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   averageScore: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   popularity: number;
 
   @Field()
   @Column()
-  source: ;
+  source: string;
 
   @Field()
   @Column()
-  countryOfOrigin: CountryCode;
+  countryOfOrigin: string;
 
   @Field()
   @Column()
   search: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   id_not: number;
 
-  @Field((type) => [Int])
+  @Field(() => [Int])
   @Column('int')
   id_in: [number];
 
-  @Field((type) => [Int])
+  @Field(() => [Int])
   @Column('int')
   id_not_in: [number];
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Column('int')
   idMal_not: number;
 
-  @Field((type) => [Int])
+  @Field(() => [Int])
   @Column('int')
   idMal_in: [number];
 
-  @Field((type) => [Int])
+  @Field(() => [Int])
   @Column('int')
   idMal_not_in: [number];
 
   @Field()
   @Column()
-  startDate_greater: ;
+  startDate_greater: number;
 
   @Field()
   @Column()
-  startDate_lesser: ;
+  startDate_lesser: number;
 
   @Field()
   @Column()
@@ -146,11 +146,11 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  endDate_greater: ;
+  endDate_greater: number;
 
   @Field()
   @Column()
-  endDate_lesser: ;
+  endDate_lesser: number;
 
   @Field()
   @Column()
@@ -158,11 +158,11 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  format_in: [];
+  format_in: [string];
 
   @Field()
   @Column()
-  format_not: ;
+  format_not: string;
 
   @Field()
   @Column()
@@ -174,7 +174,7 @@ export class Anime extends BaseEntity {
 
   @Field()
   @Column()
-  status_not: ;
+  status_not: string;
 
   @Field()
   @Column()
