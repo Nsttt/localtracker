@@ -8,23 +8,19 @@ export class Anime extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field()
+  @Field({ description: 'The official titles of the media in various languages' })
   @Column()
   title: string;
 
-  @Field(() => Int)
-  @Column('int')
-  idMal: number;
-
-  @Field()
+  @Field({ description: 'The first official release date of the media' })
   @Column()
   startDate: ;
 
-  @Field()
+  @Field({ description: 'The first official release date of the media' })
   @Column()
   endDate: ;
 
-  @Field()
+  @Field({ description: 'The first official release date of the media' })
   @Column()
   season: ;
 
@@ -32,7 +28,7 @@ export class Anime extends BaseEntity {
   @Column('int')
   seasonYear: number;
 
-  @Field()
+  @Field({ description: 'The type of the media; ANIME / MANGA / SHOW / MOVIE / BOOK' })
   @Column()
   type: ;
 
