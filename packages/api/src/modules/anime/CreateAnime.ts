@@ -1,27 +1,14 @@
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
-import bcrypt from 'bcryptjs';
-import { RegisterInput } from './register/RegisterInput';
+import { Arg, Mutation, Resolver } from 'type-graphql';
 
-import { User } from '../../entities/User';
+import { AnimeInput } from './create/AnimeInput';
+import { Anime } from '../../entities/Anime';
 
 @Resolver()
 export class RegisterResolver {
+  @Mutation(() => Anime)
+  async create(@Arg('data') {}: AnimeInput): Promise<Anime> {
+    const anime = await Anime.create({}).save();
 
-  @Query(() => String)
-  async Hello() {
-    return 'hello';
-  }
-
-  @Mutation(() => User)
-  async register(@Arg('data') { name, username, password }: RegisterInput): Promise<User> {
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const user = await User.create({
-      name,
-      username,
-      password: hashedPassword,
-    }).save();
-
-    return user;
+    return anime;
   }
 }
