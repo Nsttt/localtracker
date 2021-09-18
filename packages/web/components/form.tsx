@@ -1,16 +1,19 @@
 import type { FunctionComponent } from 'react';
-import { Button, Checkbox, FormControlLabel, Grid, Link, TextField } from '@material-ui/core';
-import { useFormStyles } from './form.styles';
+import { useTheme, Button, Checkbox, FormControlLabel, Grid, Link, TextField } from '@mui/material';
+// {
+//   width: '100%', // Fix IE 11 issue.
+//   marginTop: theme.spacing(1),
+// }
 
 interface props {
   formType: string;
 }
 
 const Form: FunctionComponent<props> = ({ formType }) => {
-  const classes = useFormStyles();
+  const theme = useTheme();
 
   return formType === 'login' ? (
-    <form className={classes.form} noValidate>
+    <form noValidate>
       <TextField
         variant="outlined"
         margin="normal"
@@ -42,7 +45,9 @@ const Form: FunctionComponent<props> = ({ formType }) => {
         fullWidth
         variant="contained"
         color="primary"
-        className={classes.submit}>
+        sx={{
+          margin: theme.spacing(3, 0, 2),
+        }}>
         Log In
       </Button>
       <Grid container>
@@ -54,7 +59,7 @@ const Form: FunctionComponent<props> = ({ formType }) => {
       </Grid>
     </form>
   ) : (
-    <form className={classes.form} noValidate>
+    <form noValidate>
       <TextField
         variant="outlined"
         margin="normal"
@@ -91,7 +96,9 @@ const Form: FunctionComponent<props> = ({ formType }) => {
         fullWidth
         variant="contained"
         color="primary"
-        className={classes.submit}>
+        sx={{
+          margin: theme.spacing(3, 0, 2),
+        }}>
         Sign Up
       </Button>
     </form>

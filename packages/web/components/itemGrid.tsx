@@ -1,8 +1,7 @@
 import type { FunctionComponent } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
-import { Card } from '../Card/card';
-import { useItemGridStyles } from './itemGrid.styles';
+import { Card } from './card';
 
 interface props {
   cardType: 'anime' | 'show' | 'movie' | 'book';
@@ -10,10 +9,14 @@ interface props {
 }
 
 export const ItemGrid: FunctionComponent<props> = ({ cardType, animeList }) => {
-  const classes = useItemGridStyles();
-
   return (
-    <Grid container className={classes.container}>
+    <Grid
+      container
+      sx={{
+        paddingRight: '7.5%',
+        paddingLeft: '3.3%',
+        flexGrow: 1,
+      }}>
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
           {animeList.map((anime) => {
