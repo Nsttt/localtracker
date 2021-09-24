@@ -5,9 +5,7 @@
     "strict": true,
     "lib": ["es2018", "esnext.asynciterable"],
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": false
   },
   "exclude": ["node_modules"]
 }
