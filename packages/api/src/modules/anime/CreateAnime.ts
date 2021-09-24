@@ -1,14 +1,18 @@
-import { Arg, Mutation, Resolver } from 'type-graphql';
+import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql';
 
+import { isAuth } from '../middlewares/isAuth';
 import { AnimeInput } from './create/AnimeInput';
 import { Anime } from '../../entities/Anime';
 
 @Resolver()
-export class RegisterResolver {
+export class AnimeResolver {
+  @UseMiddleware(isAuth)
   @Mutation(() => Anime)
-  async create(@Arg('data') {}: AnimeInput): Promise<Anime> {
-    const anime = await Anime.create({}).save();
-
-    return anime;
+  async addAnime(
+    @Arg('anime')
+    animeInput: AnimeInput,
+  ): Promise<Anime> {
+    const anime = await Anime.create(animeInput);
+    return anime.save();
   }
 }
