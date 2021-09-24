@@ -1,14 +1,14 @@
 import { Ctx, Mutation, Resolver } from 'type-graphql';
-import { MyContext } from '../../types/MyContext';
+import { SessionContext } from '../../types/SessionContext';
 
 @Resolver()
 export class LogoutResolver {
   @Mutation(() => Boolean)
-  async logout(@Ctx() ctx: MyContext): Promise<Boolean> {
+  async logout(@Ctx() ctx: SessionContext): Promise<Boolean> {
     return new Promise((res, rej) =>
       ctx.req.session!.destroy((err) => {
         if (err) {
-          console.error("Error:", err)
+          console.error('Error:', err);
           return rej(false);
         }
 
