@@ -6,8 +6,8 @@
   "scripts": {
     "start": "typescript -w src --ext ts --exec ts-node src/index.ts",
     "dev": "ts-node-dev --respawn src/index.ts",
-    "lint": "eslint . --ext .ts,.js,.tsx,.jsx",
-    "fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix",
+    "lint": "eslint . --ext .ts,.tsx",
+    "fix": "eslint . --ext .ts,.tsx --fix",
     "db:setup": "ts-node ./src/test-utils/setup.ts",
     "test": "yarn db:setup && jest"
   },
