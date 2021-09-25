@@ -5,7 +5,7 @@ interface props {
   cardType: string;
 }
 
-export const Card: FunctionComponent<props> = () => {
+export const Card: FunctionComponent<props> = ({ cardType }) => {
   const theme = useTheme();
 
   return (

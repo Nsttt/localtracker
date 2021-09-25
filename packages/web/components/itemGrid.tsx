@@ -1,14 +1,16 @@
-import type { FunctionComponent } from 'react';
+import { FunctionComponent, Key } from 'react';
 import { Grid } from '@mui/material';
 
 import { Card } from './card';
+import useStore from '../store/store';
 
 interface props {
-  cardType: 'anime' | 'show' | 'movie' | 'book';
-  animeList: [{}];
+  cardType: 'anime';
 }
 
-export const ItemGrid: FunctionComponent<props> = ({ cardType, animeList }) => {
+export const ItemGrid: FunctionComponent<props> = ({ cardType }: props) => {
+  const list = useStore((state) => state.animeList);
+
   return (
     <Grid
       container
@@ -19,10 +21,8 @@ export const ItemGrid: FunctionComponent<props> = ({ cardType, animeList }) => {
       }}>
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
-          {animeList.map((anime) => {
-            <Grid item key={anime.id}>
-              <Card cardType={cardType} />
-            </Grid>;
+          {list.map((anime: { Media: { id: Key | null | undefined } }) => {
+            <Card cardType="ANIME" key={anime.Media.id} />;
           })}
         </Grid>
       </Grid>

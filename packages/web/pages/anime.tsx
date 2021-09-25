@@ -1,10 +1,13 @@
 import type { NextPage } from 'next';
 import { Grid } from '@mui/material';
 
+import useStore from '../store/store';
 import Header from '../components/header';
 import { Card } from '../components/card';
+import { ItemGrid } from '../components/itemGrid';
 
 const AnimeList: NextPage = () => {
+
   return (
     <>
       <Header />
@@ -17,60 +20,7 @@ const AnimeList: NextPage = () => {
         }}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={2}>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
-            <Grid item>
-              <Card cardType="anime" />
-            </Grid>
+            <ItemGrid cardType="anime"/>
           </Grid>
         </Grid>
       </Grid>

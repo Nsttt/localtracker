@@ -1,9 +1,5 @@
 import type { FunctionComponent } from 'react';
 import { useTheme, Button, Checkbox, FormControlLabel, Grid, Link, TextField } from '@mui/material';
-// {
-//   width: '100%', // Fix IE 11 issue.
-//   marginTop: theme.spacing(1),
-// }
 
 interface props {
   formType: string;
