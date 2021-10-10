@@ -13,7 +13,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h2 align="center">LocalTracker</h2>
+  <h1 align="center">LocalTracker</h1>
 
   <p align="center">
     A media tracking app that fills all your media-tracking needs.
