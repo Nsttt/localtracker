@@ -4,7 +4,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "main": "index.js",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -14,7 +13,9 @@
     "api:dev": "yarn api dev",
     "web:dev": "yarn web dev",
     "lint": "lerna run lint",
-    "fix": "lerna run fix"
+    "fix": "lerna run fix",
+    "new-version": "lerna version --conventional-commits --yes",
+    "diff": "lerna diff"
   },
   "husky": {
     "hooks": {
