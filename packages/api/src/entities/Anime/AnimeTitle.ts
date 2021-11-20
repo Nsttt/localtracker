@@ -6,7 +6,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export default class AnimeTitle {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
   @Field()
   @Column()
@@ -14,13 +14,13 @@ export default class AnimeTitle {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  romaji?: string;
+  romaji: string | null;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  english?: string;
+  english: string | null;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  native?: string;
+  native: string | null;
 }

@@ -6,10 +6,10 @@ import {
   MediaTag,
   MediaTrailer,
   MediaCoverImage,
-  MediaExternalLinks,
+  MediaExternalLink,
   AiringSchedule,
 } from '../shared';
-import { AnimeTitle } from './AnimeTitle';
+import { AnimeTitle } from '.';
 import { AnimeSeason, AnimeFormat } from '../../types/AnimeTypes';
 import {
   MediaStatus,
@@ -26,23 +26,23 @@ export default class Anime extends BaseEntity {
   readonly id: number;
 
   @Field(() => AnimeTitle)
-  @Column()
+  @Column(() => AnimeTitle)
   title: AnimeTitle;
 
   @Field()
-  @Column()
-  synonyms: string;
+  @Column('simple-array')
+  synonyms: string[];
 
   @Field()
   @Column()
   description: string;
 
   @Field(() => FuzzyDate)
-  @Column()
+  @Column(() => FuzzyDate)
   startDate: FuzzyDate;
 
   @Field(() => FuzzyDate)
-  @Column()
+  @Column(() => FuzzyDate)
   endDate: FuzzyDate;
 
   @Field()
@@ -82,8 +82,8 @@ export default class Anime extends BaseEntity {
   genre: string;
 
   @Field(() => [MediaTag])
-  @Column()
-  tag: MediaTag;
+  @Column(() => MediaTag)
+  tag: MediaTag[];
 
   @Field(() => Boolean)
   @Column({ default: false })
@@ -110,15 +110,15 @@ export default class Anime extends BaseEntity {
   source: MediaSource;
 
   @Field()
-  @Column()
-  countryOfOrigin: CountryCode;
+  @Column('enum', { enum: CountryCode })
+  countryOfOrigin: string;
 
   @Field()
   @Column()
   hashtag: String;
 
   @Field(() => MediaTrailer)
-  @Column()
+  @Column(() => MediaTrailer)
   trailer: MediaTrailer;
 
   @Field()
@@ -126,7 +126,7 @@ export default class Anime extends BaseEntity {
   updatedAt: number;
 
   @Field(() => MediaCoverImage)
-  @Column()
+  @Column(() => MediaCoverImage)
   coverImage: MediaCoverImage;
 
   @Field()
@@ -146,10 +146,10 @@ export default class Anime extends BaseEntity {
   studios: string;
 
   @Field(() => [AiringSchedule])
-  @Column()
+  @Column(() => AiringSchedule)
   nextAiringEpisode: AiringSchedule[];
 
-  @Field(() => [MediaExternalLinks])
-  @Column()
-  externalLinks: MediaExternalLinks[];
+  @Field(() => [MediaExternalLink])
+  @Column(() => MediaExternalLink)
+  externalLinks: MediaExternalLink[];
 }
