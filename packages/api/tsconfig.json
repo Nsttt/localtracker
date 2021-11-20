@@ -1,8 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
     "baseUrl": ".",
+    "paths": {
+      "@src:": ["./src"]
+    },
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "lib": ["ESNext"],
+    "esModuleInterop": true,
+    "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
