@@ -6,21 +6,21 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export default class MediaCoverImage {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  extraLarge?: string;
+  extraLarge: string | null;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  large?: string;
+  large: string | null;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  medium?: string;
+  medium: string | null;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  color?: string;
+  color: string | null;
 }

@@ -6,13 +6,13 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export default class MediaTrailer {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
   @Field()
-  @Column()
-  site?: string;
+  @Column({ nullable: true })
+  site: string | null;
 
   @Field()
-  @Column()
-  thumbnail?: string;
+  @Column({ nullable: true })
+  thumbnail: string | null;
 }

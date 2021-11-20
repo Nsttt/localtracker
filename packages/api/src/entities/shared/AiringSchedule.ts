@@ -6,17 +6,17 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export default class AiringSchedule {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
   @Field()
-  @Column()
-  airingAt?: number;
+  @Column({ nullable: true })
+  airingAt: number | null;
 
   @Field()
-  @Column()
-  timeUntilAiring?: number;
+  @Column({ nullable: true })
+  timeUntilAiring: number | null;
 
   @Field()
-  @Column()
-  episode?: number;
+  @Column({ nullable: true })
+  episode: number | null;
 }

@@ -13,8 +13,8 @@ export default class MediaTag {
   name: string;
 
   @Field()
-  @Column()
-  description?: string;
+  @Column({ nullable: true })
+  description: string | null;
 
   @Field()
   @Column()
