@@ -1,7 +1,7 @@
 import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql';
 
 import { isAuth } from '../middlewares/isAuth';
-import { AnimeInput } from './create/AnimeInput';
+import { AnimeInput } from './inputs/AnimeInput';
 import { Anime } from '../../entities/Anime';
 
 @Resolver()

@@ -1,39 +1,38 @@
 import { Field, InputType, Int } from 'type-graphql';
 
-import { Anime, AnimeTitle } from '../../../entities/Anime';
+import { Anime } from '../../../entities/Anime';
 
+import { AnimeTitleInput } from './AnimeTitleInput';
+import { AnimeFormat, AnimeSeason } from '../../../types/AnimeTypes';
 import {
-  FuzzyDate,
-  MediaTag,
-  AiringSchedule,
-  MediaCoverImage,
-  MediaTrailer,
-  MediaExternalLinks,
-} from '../../../entities/shared';
-import { AnimeSeason, AnimeFormat } from '../../../types/AnimeTypes';
-import {
-  MediaStatus,
-  MediaSource,
   CountryCode,
+  MediaSource,
+  MediaStatus,
   MediaType,
 } from '../../../types/MediaTypes';
+import FuzzyDateInput from '../../shared/inputs/FuzzyDateInput';
+import MediaTagInput from '../../shared/inputs/MediaTagInput';
+import MediaTrailerInput from '../../shared/inputs/MediaTrailerInput';
+import MediaCoverImageInput from '../../shared/inputs/MediaCoverImageInput';
+import AiringScheduleInput from '../../shared/inputs/AiringScheduleInput';
+import MediaExternalLinkInput from '../../shared/inputs/MediaExternalLinkInput';
 
 @InputType()
 export class AnimeInput implements Partial<Anime> {
   @Field()
-  title: string;
+  title: AnimeTitleInput;
 
-  @Field()
-  synonyms: string;
+  @Field(() => [String])
+  synonyms: string[];
 
   @Field()
   description: string;
 
   @Field()
-  startDate: FuzzyDate;
+  startDate: FuzzyDateInput;
 
   @Field()
-  endDate: FuzzyDate;
+  endDate: FuzzyDateInput;
 
   @Field()
   season: AnimeSeason;
@@ -62,8 +61,8 @@ export class AnimeInput implements Partial<Anime> {
   @Field()
   genre: string;
 
-  @Field()
-  tag: MediaTag;
+  @Field(() => [MediaTagInput])
+  tag: MediaTagInput[];
 
   @Field(() => Boolean)
   onList: boolean;
@@ -81,7 +80,7 @@ export class AnimeInput implements Partial<Anime> {
   popularity: number;
 
   @Field()
-  source: string;
+  source: MediaSource;
 
   @Field()
   countryOfOriginL: CountryCode;
@@ -90,13 +89,13 @@ export class AnimeInput implements Partial<Anime> {
   hashtag: String;
 
   @Field()
-  trailer: MediaTrailer;
+  trailer: MediaTrailerInput;
 
   @Field()
   updatedAt: number;
 
   @Field()
-  coverImage: MediaCoverImage;
+  coverImage: MediaCoverImageInput;
 
   @Field()
   bannerImage: String;
@@ -110,9 +109,9 @@ export class AnimeInput implements Partial<Anime> {
   @Field()
   studios: string;
 
-  @Field()
-  nextAiringEpisode: AiringSchedule;
+  @Field(() => [AiringScheduleInput])
+  nextAiringEpisode: AiringScheduleInput[];
 
-  @Field()
-  externalLinks: MediaExternalLinks;
+  @Field(() => [MediaExternalLinkInput])
+  externalLinks: MediaExternalLinkInput[];
 }

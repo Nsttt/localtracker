@@ -10,11 +10,11 @@ export class AnimeTitleInput implements Partial<AnimeTitle> {
   userPreferred: string;
 
   @Field({ nullable: true })
-  romaji: string | null;
+  romaji: string;
 
   @Field({ nullable: true })
-  english: string | null;
+  english: string;
 
   @Field({ nullable: true })
-  native: string | null;
+  native: string;
 }
