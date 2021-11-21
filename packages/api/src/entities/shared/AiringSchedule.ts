@@ -10,13 +10,13 @@ export default class AiringSchedule {
 
   @Field()
   @Column({ nullable: true })
-  airingAt: number | null;
+  airingAt: number;
 
   @Field()
   @Column({ nullable: true })
-  timeUntilAiring: number | null;
+  timeUntilAiring: number;
 
   @Field()
   @Column({ nullable: true })
-  episode: number | null;
+  episode: number;
 }

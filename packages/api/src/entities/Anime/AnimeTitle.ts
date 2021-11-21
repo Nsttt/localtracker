@@ -14,13 +14,13 @@ export default class AnimeTitle {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  romaji: string | null;
+  romaji: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  english: string | null;
+  english: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  native: string | null;
+  native: string;
 }

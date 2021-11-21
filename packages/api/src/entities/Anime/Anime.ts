@@ -29,7 +29,7 @@ export default class Anime extends BaseEntity {
   @Column(() => AnimeTitle)
   title: AnimeTitle;
 
-  @Field()
+  @Field(() => [String])
   @Column('simple-array')
   synonyms: string[];
 

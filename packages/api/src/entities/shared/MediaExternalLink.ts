@@ -10,9 +10,9 @@ export default class MediaExternalLink {
 
   @Field()
   @Column()
-  url?: string;
+  url: string;
 
   @Field()
   @Column()
-  site?: string;
+  site: string;
 }

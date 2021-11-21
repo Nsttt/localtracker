@@ -10,9 +10,9 @@ export default class MediaTrailer {
 
   @Field()
   @Column({ nullable: true })
-  site: string | null;
+  site: string;
 
   @Field()
   @Column({ nullable: true })
-  thumbnail: string | null;
+  thumbnail: string;
 }

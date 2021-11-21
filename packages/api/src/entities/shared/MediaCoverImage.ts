@@ -10,17 +10,17 @@ export default class MediaCoverImage {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  extraLarge: string | null;
+  extraLarge: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  large: string | null;
+  large: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  medium: string | null;
+  medium: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  color: string | null;
+  color: string;
 }
