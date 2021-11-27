@@ -1,3 +1,4 @@
 node_modules
 .DS_STORE
 db.sqlite3
+yarn-error.log
