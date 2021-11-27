@@ -1,11 +1,8 @@
 import { AnimeTitle } from 'src/entities/Anime';
-import { Field, InputType, Int } from 'type-graphql';
+import { Field, InputType } from 'type-graphql';
 
 @InputType()
 export class AnimeTitleInput implements Partial<AnimeTitle> {
-  @Field(() => Int)
-  readonly id: number;
-
   @Field()
   userPreferred: string;
 

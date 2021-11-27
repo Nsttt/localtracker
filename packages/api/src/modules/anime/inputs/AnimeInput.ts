@@ -1,7 +1,5 @@
 import { Field, InputType, Int } from 'type-graphql';
 
-import { Anime } from '../../../entities/Anime';
-
 import { AnimeTitleInput } from './AnimeTitleInput';
 import { AnimeFormat, AnimeSeason } from '../../../types/AnimeTypes';
 import {
@@ -18,100 +16,100 @@ import AiringScheduleInput from '../../shared/inputs/AiringScheduleInput';
 import MediaExternalLinkInput from '../../shared/inputs/MediaExternalLinkInput';
 
 @InputType()
-export class AnimeInput implements Partial<Anime> {
+export class AnimeInput {
   @Field()
   title: AnimeTitleInput;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   synonyms: string[];
 
-  @Field()
+  @Field({ nullable: true })
   description: string;
 
-  @Field()
+  @Field({ nullable: true })
   startDate: FuzzyDateInput;
 
-  @Field()
+  @Field({ nullable: true })
   endDate: FuzzyDateInput;
 
-  @Field()
+  @Field({ nullable: true })
   season: AnimeSeason;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   seasonYear: number;
 
   @Field()
   type: MediaType;
 
-  @Field()
+  @Field({ nullable: true })
   format: AnimeFormat;
 
-  @Field()
+  @Field({ nullable: true })
   status: MediaStatus;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   episodes: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   duration: number;
 
   @Field(() => Boolean)
   isAdult: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   genre: string;
 
-  @Field(() => [MediaTagInput])
+  @Field(() => [MediaTagInput], { nullable: true })
   tag: MediaTagInput[];
 
   @Field(() => Boolean)
   onList: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   isLicensed: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   licensedBy: string;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   averageScore: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   popularity: number;
 
-  @Field()
+  @Field({ nullable: true })
   source: MediaSource;
 
-  @Field()
+  @Field({ nullable: true })
   countryOfOriginL: CountryCode;
 
-  @Field()
+  @Field({ nullable: true })
   hashtag: String;
 
-  @Field()
+  @Field({ nullable: true })
   trailer: MediaTrailerInput;
 
-  @Field()
+  @Field({ nullable: true })
   updatedAt: number;
 
-  @Field()
+  @Field({ nullable: true })
   coverImage: MediaCoverImageInput;
 
-  @Field()
+  @Field({ nullable: true })
   bannerImage: String;
 
-  @Field()
+  @Field({ nullable: true })
   characters: string;
 
-  @Field()
+  @Field({ nullable: true })
   staff: string;
 
-  @Field()
+  @Field({ nullable: true })
   studios: string;
 
-  @Field(() => [AiringScheduleInput])
+  @Field(() => [AiringScheduleInput], { nullable: true })
   nextAiringEpisode: AiringScheduleInput[];
 
-  @Field(() => [MediaExternalLinkInput])
+  @Field(() => [MediaExternalLinkInput], { nullable: true })
   externalLinks: MediaExternalLinkInput[];
 }

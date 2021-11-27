@@ -1,10 +1,10 @@
-import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql';
+import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 
 import { isAuth } from '../middlewares/isAuth';
 import { AnimeInput } from './inputs/AnimeInput';
 import { Anime } from '../../entities/Anime';
 
-@Resolver()
+@Resolver(Anime)
 export class AnimeResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Anime)
@@ -12,7 +12,12 @@ export class AnimeResolver {
     @Arg('anime')
     animeInput: AnimeInput,
   ): Promise<Anime> {
-    const anime = await Anime.create(animeInput);
-    return anime.save();
+    return Anime.create(animeInput).save();
+  }
+
+  @UseMiddleware(isAuth)
+  @Query(() => [Anime])
+  async getAnimes() {
+    return Anime.find();
   }
 }
