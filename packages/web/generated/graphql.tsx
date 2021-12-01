@@ -1,8 +1,11 @@
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -240,13 +243,27 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type MutationMutationVariables = Exact<{
+export type RegisterMutationVariables = Exact<{
   data: RegisterInput;
 }>;
 
 
-export type MutationMutation = { __typename?: 'Mutation', register: { __typename?: 'User', id: string, name: string, username: string } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', id: string, name: string, username: string } };
 
+
+export const RegisterDocument = gql`
+    mutation Register($data: RegisterInput!) {
+  register(data: $data) {
+    id
+    name
+    username
+  }
+}
+    `;
+
+export function useRegisterMutation() {
+  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
 import { IntrospectionQuery } from 'graphql';
 export default {
   "__schema": {
