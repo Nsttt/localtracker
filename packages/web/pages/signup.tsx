@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useTheme, Container, Typography, Box } from '@mui/material';
 
 import Header from '../components/header';
-import Form from '../components/form';
+import { RegisterForm } from '../components/registerForm';
 
 const SignupPage: NextPage = () => {
   const theme = useTheme();
@@ -21,7 +21,7 @@ const SignupPage: NextPage = () => {
           <Typography component="h1" variant="h4">
             Sign Up
           </Typography>
-          <Form formType="sign-up" />
+          <RegisterForm />
         </Box>
       </Container>
     </>

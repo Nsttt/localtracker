@@ -1,10 +1,9 @@
 import Head from 'next/head';
 import type { AppProps } from 'next/app';
-import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { CacheProvider, EmotionCache } from '@emotion/react';
+import { withUrqlClient } from 'next-urql';
 
-import { useApollo } from '../hooks/useApollo';
 import theme from '../styles/theme';
 import createEmotionCache from '../styles/createEmotionCache';
 
@@ -14,25 +13,21 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-export default function MyApp({
-  Component,
-  pageProps,
-  emotionCache = clientSideEmotionCache,
-}: MyAppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
-
+function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <title>LocalTracker</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ApolloProvider client={apolloClient}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </ApolloProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </CacheProvider>
   );
 }
+
+export default withUrqlClient((_ssrExchange, ctx) => ({
+  url: 'http://localhost:4000/graphql',
+}))(MyApp);
