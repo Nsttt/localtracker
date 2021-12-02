@@ -28,9 +28,10 @@ async function main() {
     session({
       store: new RedisStore({
         client: redis as any,
+        disableTouch: true,
       }),
       name: 'qid',
-      secret: 'test',
+      secret: 'AasdAALK24JKNSDJKLH23LRas',
       resave: false,
       saveUninitialized: false,
       cookie: {
