@@ -243,6 +243,14 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type LoginMutationVariables = Exact<{
+  password: Scalars['String'];
+  username: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: string, name: string, username: string } | null | undefined };
+
 export type RegisterMutationVariables = Exact<{
   data: RegisterInput;
 }>;
@@ -250,7 +258,25 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', id: string, name: string, username: string } };
 
+export type GetAllAnimesQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type GetAllAnimesQuery = { __typename?: 'Query', getAnimes: Array<{ __typename?: 'Anime', id: string, synonyms: Array<string>, description: string, season: string, seasonYear: number, type: string, format: string, status: string, episodes: number, duration: number, isAdult: boolean, genre: string, onList: boolean, isLicensed: boolean, licensedBy: string, averageScore: number, popularity: number, source: string, countryOfOrigin: string, hashtag: string, updatedAt: number, bannerImage: string, characters: string, staff: string, studios: string, title: { __typename?: 'AnimeTitle', romaji?: string | null | undefined, id: number, userPreferred: string, english?: string | null | undefined, native?: string | null | undefined }, startDate: { __typename?: 'FuzzyDate', id: string, year: number, month: number, day: number }, endDate: { __typename?: 'FuzzyDate', year: number, id: string, month: number, day: number }, tag: Array<{ __typename?: 'MediaTag', id: string, name: string, description: string, isAdult: boolean }>, trailer: { __typename?: 'MediaTrailer', id: string, site: string, thumbnail: string }, coverImage: { __typename?: 'MediaCoverImage', id: string, extraLarge?: string | null | undefined, medium?: string | null | undefined, large?: string | null | undefined, color?: string | null | undefined }, nextAiringEpisode: Array<{ __typename?: 'AiringSchedule', id: string, airingAt: number, timeUntilAiring: number, episode: number }>, externalLinks: Array<{ __typename?: 'MediaExternalLink', site: string, url: string, id: string }> }> };
+
+
+export const LoginDocument = gql`
+    mutation Login($password: String!, $username: String!) {
+  login(password: $password, username: $username) {
+    id
+    name
+    username
+  }
+}
+    `;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($data: RegisterInput!) {
   register(data: $data) {
@@ -263,6 +289,89 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const GetAllAnimesDocument = gql`
+    query GetAllAnimes {
+  getAnimes {
+    id
+    title {
+      romaji
+      id
+      userPreferred
+      english
+      native
+    }
+    synonyms
+    description
+    startDate {
+      id
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      id
+      month
+      day
+    }
+    season
+    seasonYear
+    type
+    format
+    status
+    episodes
+    duration
+    isAdult
+    genre
+    tag {
+      id
+      name
+      description
+      isAdult
+    }
+    onList
+    isLicensed
+    licensedBy
+    averageScore
+    popularity
+    source
+    countryOfOrigin
+    hashtag
+    trailer {
+      id
+      site
+      thumbnail
+    }
+    updatedAt
+    coverImage {
+      id
+      extraLarge
+      medium
+      large
+      color
+    }
+    bannerImage
+    characters
+    staff
+    studios
+    nextAiringEpisode {
+      id
+      airingAt
+      timeUntilAiring
+      episode
+    }
+    externalLinks {
+      site
+      url
+      id
+    }
+  }
+}
+    `;
+
+export function useGetAllAnimesQuery(options: Omit<Urql.UseQueryArgs<GetAllAnimesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetAllAnimesQuery>({ query: GetAllAnimesDocument, ...options });
 };
 import { IntrospectionQuery } from 'graphql';
 export default {
