@@ -1,45 +1,26 @@
-import { Box, Button, TextField, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
+import { Box, Button, TextField, useTheme } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { RegisterInput, useRegisterMutation } from '../generated/graphql';
+import { RegisterInput, useLoginMutation } from '../generated/graphql';
 
-export const RegisterForm = (): JSX.Element => {
+export const LoginForm = (): JSX.Element => {
   const router = useRouter();
   const theme = useTheme();
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      name: '',
       username: '',
       password: '',
     },
   });
-  const [, register] = useRegisterMutation();
+  const [, login] = useLoginMutation();
 
   const onSubmit: SubmitHandler<RegisterInput> = async (data) => {
-    await register({ data });
+    await login(data);
     router.push('/');
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-          />
-        )}
-      />
       <Controller
         name="username"
         control={control}
