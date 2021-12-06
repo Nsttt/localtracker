@@ -1,13 +1,12 @@
 import type { NextPage } from 'next';
 import { Grid } from '@mui/material';
 
-import useStore from '../store/store';
 import Header from '../components/header';
 import { Card } from '../components/card';
 import { ItemGrid } from '../components/itemGrid';
+import { useGetAllAnimesQuery } from '../generated/graphql';
 
 const AnimeList: NextPage = () => {
-
   return (
     <>
       <Header />
@@ -20,7 +19,7 @@ const AnimeList: NextPage = () => {
         }}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={2}>
-            <ItemGrid cardType="anime"/>
+            <ItemGrid cardType="anime" />
           </Grid>
         </Grid>
       </Grid>
@@ -29,3 +28,11 @@ const AnimeList: NextPage = () => {
 };
 
 export default AnimeList;
+
+export async function getServerSideProps() {
+  const [, getAllAnimes] = useGetAllAnimesQuery();
+
+  const data = await getAllAnimes();
+
+  return { props: { data } };
+}

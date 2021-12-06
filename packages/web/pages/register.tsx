@@ -4,7 +4,7 @@ import { useTheme, Container, Typography, Box } from '@mui/material';
 import Header from '../components/header';
 import { RegisterForm } from '../components/registerForm';
 
-const SignupPage: NextPage = () => {
+const RegisterPage: NextPage = () => {
   const theme = useTheme();
 
   return (
@@ -28,4 +28,4 @@ const SignupPage: NextPage = () => {
   );
 };
 
-export default SignupPage;
+export default RegisterPage;

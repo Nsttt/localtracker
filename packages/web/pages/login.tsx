@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useTheme, Box, Container, Typography } from '@mui/material';
 
 import Header from '../components/header';
-import Form from '../components/form';
+import { LoginForm } from '../components/loginForm';
 
 const LoginPage: NextPage = () => {
   const theme = useTheme();
@@ -21,7 +21,7 @@ const LoginPage: NextPage = () => {
           <Typography component="h1" variant="h4">
             Log in
           </Typography>
-          <Form formType="login" />
+          <LoginForm />
         </Box>
       </Container>
     </>
