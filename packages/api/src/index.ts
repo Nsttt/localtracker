@@ -8,6 +8,7 @@ import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 
 import { createSchema } from './utils/createSchema';
+import { SessionContext } from './types/SessionContext';
 
 async function main() {
   await createConnection();
@@ -15,30 +16,33 @@ async function main() {
   const schema = await createSchema();
   const server = new ApolloServer({
     schema,
-    context: ({ req, res }: any) => ({ req, res }),
+    context: ({ req, res }: SessionContext) => ({ req, res }),
   });
   await server.start();
 
   const app = express();
-  app.use(cors());
-
-  const redis = new Redis();
   const RedisStore = connectRedis(session);
+  const redisClient = new Redis();
+
   app.use(
     session({
       store: new RedisStore({
-        client: redis as any,
+        client: redisClient,
         disableTouch: true,
       }),
       name: 'qid',
-      secret: 'AasdAALK24JKNSDJKLH23LRas',
+      secret: 'qowiueojwojfalksdjoqiwueo',
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 365,
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
       },
+    }),
+    cors({
+      // origin: 'http://localhost:3000',
+      // credentials: true,
     }),
   );
 

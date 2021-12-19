@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export interface SessionContext {
+export type SessionContext = {
   req: Request & {
     session: {
       userId?: any;
@@ -11,4 +11,4 @@ export interface SessionContext {
       userId?: any;
     };
   };
-}
+};

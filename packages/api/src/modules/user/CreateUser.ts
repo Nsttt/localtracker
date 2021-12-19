@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { isAuth } from '../middlewares/isAuth';
 import { RegisterInput } from './register/RegisterInput';
 
-import { User } from '../../entities/User';
+import { User } from '../../entities/User/User';
 
 @Resolver()
 export class RegisterResolver {

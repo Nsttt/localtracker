@@ -3,7 +3,7 @@ import faker from 'faker';
 
 import { gCall } from '../../../test-utils/gCall';
 import { testConn } from '../../../test-utils/testConn';
-import { User } from '../../../entities/User';
+import { User } from '../../../entities/User/User';
 
 let conn: Connection;
 beforeAll(async () => {

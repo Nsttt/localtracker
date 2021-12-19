@@ -12,6 +12,7 @@
     "test": "yarn db:setup && jest"
   },
   "dependencies": {
+    "apollo-server-core": "^3.5.0",
     "apollo-server-express": "^3.5.0",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.13.2",
@@ -22,6 +23,7 @@
     "graphql": "^15.3.0",
     "graphql-upload": "^12.0.0",
     "ioredis": "^4.28.0",
+    "redis": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
     "type-graphql": "^1.1.1",
