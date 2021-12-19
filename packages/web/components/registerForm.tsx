@@ -17,11 +17,11 @@ export const RegisterForm = (): JSX.Element => {
 
   const onSubmit: SubmitHandler<RegisterInput> = async (data) => {
     await register({ data });
-    router.push('/');
+    router.push('/login');
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="name"
         control={control}

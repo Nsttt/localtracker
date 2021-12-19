@@ -28,6 +28,18 @@ function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
   );
 }
 
-export default withUrqlClient((_ssrExchange, ctx) => ({
-  url: 'http://localhost:4000/graphql',
-}))(MyApp);
+export default withUrqlClient((ssrExchange, ctx) => {
+  let cookie = '';
+
+  return {
+    url: 'http://localhost:4000/graphql',
+    fetchOptions: {
+      credentials: 'same-origin' as const,
+      headers: cookie
+        ? {
+            cookie,
+          }
+        : undefined,
+    },
+  };
+})(MyApp);

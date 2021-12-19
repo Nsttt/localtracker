@@ -11,7 +11,7 @@ export const Card: FunctionComponent<props> = ({ cardType }) => {
   return (
     <Paper
       sx={{
-        marginTop: theme.spacing(1),
+        margin: theme.spacing(1),
         width: 210,
         height: 315,
       }}></Paper>
