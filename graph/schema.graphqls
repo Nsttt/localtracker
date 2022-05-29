@@ -1,0 +1,426 @@
+type Query {
+  animes: [Anime!]!
+}
+
+type Mutation {
+  createAnime(input: NewAnime!): Anime!
+}
+
+### SHARED TYPES ###
+
+type MediaTrailer {
+  id: ID!
+  site: String
+  thumbnail: String
+}
+
+type MediaTag {
+  id: ID!
+  name: String
+  description: String
+  isAdult: Boolean
+}
+
+type MediaExternalLink {
+  id: ID!
+  url: String
+  site: String
+}
+
+type MediaCoverImage {
+  id: ID!
+  extraLarge: String
+  large: String
+  medium: String
+  color: String
+}
+
+type AiringSchedule {
+  id: ID!
+  airingAt: Int
+  timeUntilAiring: Int
+  episode: Int
+}
+
+type FuzzyDate {
+  id: ID!
+  year: Int
+  month: Int
+  day: Int
+}
+
+enum MediaType {
+  ANIME
+  OVA
+  ONA
+  MANGA
+  MOVIE
+  SHOW
+  BOOK
+}
+
+enum MediaStatus {
+  FINISHED
+  RELEASING
+  NOT_YET_RELEASED
+  CANCELLED
+  HIATUS
+}
+
+enum MediaSource {
+  ORIGINAL
+  MANGA
+  ANIME
+  LIGHT_NOVEL
+  VISUAL_NOVEL
+  VIDEO_GAME
+  NOVEL
+  DOUJINSHI
+  WEB_NOVEL
+  LIVE_ACTION
+  GAME
+  COMIC
+  MULTIMEDIA_PROJECT
+  PICTURE_BOOK
+}
+
+enum CountryCode {
+  AF
+  AL
+  DZ
+  AS
+  AD
+  AO
+  AI
+  AQ
+  AG
+  AR
+  AM
+  AW
+  AU
+  AT
+  AZ
+  BS
+  BH
+  BD
+  BB
+  BY
+  BE
+  BZ
+  BJ
+  BM
+  BT
+  BO
+  BA
+  BW
+  BV
+  BR
+  IO
+  BN
+  BG
+  BF
+  BI
+  KH
+  CM
+  CA
+  CV
+  KY
+  CF
+  TD
+  CL
+  CN
+  CX
+  CC
+  CO
+  KM
+  CG
+  CD
+  CK
+  CR
+  CI
+  HR
+  CU
+  CY
+  CZ
+  DK
+  DJ
+  DM
+  DO
+  EC
+  EG
+  SV
+  GQ
+  ER
+  EE
+  ET
+  FK
+  FO
+  FJ
+  FI
+  FR
+  GF
+  PF
+  TF
+  GA
+  GM
+  GE
+  DE
+  GH
+  GI
+  GR
+  GL
+  GD
+  GP
+  GU
+  GT
+  GG
+  GN
+  GW
+  GY
+  HT
+  HM
+  VA
+  HN
+  HK
+  HU
+  IS
+  IN
+  ID
+  IR
+  IQ
+  IE
+  IM
+  IL
+  IT
+  JM
+  JP
+  JE
+  JO
+  KZ
+  KE
+  KI
+  KP
+  KR
+  KW
+  KG
+  LA
+  LV
+  LB
+  LS
+  LR
+  LY
+  LI
+  LT
+  LU
+  MO
+  MK
+  MG
+  MW
+  MY
+  MV
+  ML
+  MT
+  MH
+  MQ
+  MR
+  MU
+  YT
+  MX
+  FM
+  MD
+  MC
+  MN
+  ME
+  MS
+  MA
+  MZ
+  MM
+  NA
+  NR
+  NP
+  NL
+  AN
+  NC
+  NZ
+  NI
+  NE
+  NG
+  NU
+  NF
+  MP
+  NO
+  OM
+  PK
+  PW
+  PS
+  PA
+  PG
+  PY
+  PE
+  PH
+  PN
+  PL
+  PT
+  PR
+  QA
+  RE
+  RO
+  RU
+  RW
+  SH
+  KN
+  LC
+  PM
+  VC
+  WS
+  SM
+  ST
+  SA
+  SN
+  RS
+  SC
+  SL
+  SG
+  SK
+  SI
+  SB
+  SO
+  ZA
+  GS
+  ES
+  LK
+  SD
+  SR
+  SJ
+  SZ
+  SE
+  CH
+  SY
+  TW
+  TJ
+  TZ
+  TH
+  TL
+  TG
+  TK
+  TO
+  TT
+  TN
+  TR
+  TM
+  TC
+  TV
+  UG
+  UA
+  AE
+  GB
+  US
+  UM
+  UY
+  UZ
+  VU
+  VE
+  VN
+  VG
+  VI
+  WF
+  EH
+  YE
+  ZM
+  ZW
+}
+
+### ANIME ###
+
+type Anime {
+  id: ID!
+  title: AnimeTitle!
+  synonyms: [String]
+  description: String
+  startDate: FuzzyDate
+  endDate: FuzzyDate
+  season: AnimeSeason
+  seasonYear: Int
+  type: MediaType
+  format: AnimeFormat
+  status: MediaStatus
+  episodes: Int
+  duration: String
+  isAdult: Boolean
+  genre: String
+  tag: [MediaTag]
+  onList: Boolean
+  isLicensed: Boolean
+  licensedBy: String
+  averageScore: Int
+  popularity: Int
+  source: MediaSource
+  countryOfOrigin: String
+  hashtag: String
+  trailer: MediaTrailer
+  updatedAt: Int
+  coverImage: MediaCoverImage
+  bannerImage: String
+  characters: [String]
+  staff: [String]
+  studios: [String]
+  nextAiringEpisode: [AiringSchedule]
+  externalLinks: [MediaExternalLink]
+}
+
+type AnimeTitle {
+  id: ID!
+  userPreferred: String
+  romaji: String
+  english: String
+  native: String
+}
+
+enum AnimeSeason {
+  WINTER
+  SPRING
+  SUMMER
+  FALL
+}
+
+enum AnimeFormat {
+  TV
+  TV_SHORT
+  SPECIAL
+  OVA
+  ONA
+}
+
+input NewAnime {
+  title: String!
+  description: String
+  startDate: String
+  endDate: String
+  season: String
+  seasonYear: Int
+  type: String
+  format: String
+  status: String
+  episodes: Int
+  duration: String
+  isAdult: Boolean
+  genre: String
+  tag: [String]
+  onList: Boolean
+  isLicensed: Boolean
+  licensedBy: String
+  averageScore: Int
+  popularity: Int
+  source: String
+  countryOfOrigin: String
+  hashtag: String
+  trailer: String
+  updatedAt: Int
+  coverImage: String
+  bannerImage: String
+  characters: [String]
+  staff: [String]
+  studios: [String]
+  nextAiringEpisode: [String]
+  externalLinks: [String]
+}
