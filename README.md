@@ -29,6 +29,7 @@
   </p>
 </div>
 
+# WE'RE CURRENTLY REWRITING THE APP TO GO. THIS README IS CURRENTLY OUTDATED WITH THE PREVIOUS VERSION.
 ## About The Project
 
 <!-- [![Localtracker Screen Shot][product-screenshot]]() -->
