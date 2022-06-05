@@ -1,11 +1,13 @@
 package graph
 
-import "localtracker/graph/model"
+import (
+	"localtracker/app/repository"
+)
 
 // This file will not be regenerated automatically.
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	animes []*model.Anime
+	AnimeRepository repository.AnimeRepository
 }

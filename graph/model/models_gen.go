@@ -15,6 +15,40 @@ type AiringSchedule struct {
 	Episode         *int   `json:"episode"`
 }
 
+type AnimeInput struct {
+	Title             string    `json:"title"`
+	Description       *string   `json:"description"`
+	StartDate         *string   `json:"startDate"`
+	EndDate           *string   `json:"endDate"`
+	Season            *string   `json:"season"`
+	SeasonYear        *int      `json:"seasonYear"`
+	Type              *string   `json:"type"`
+	Format            *string   `json:"format"`
+	Status            *string   `json:"status"`
+	Episodes          *int      `json:"episodes"`
+	Duration          *string   `json:"duration"`
+	IsAdult           *bool     `json:"isAdult"`
+	Genre             *string   `json:"genre"`
+	Tag               []*string `json:"tag"`
+	OnList            *bool     `json:"onList"`
+	IsLicensed        *bool     `json:"isLicensed"`
+	LicensedBy        *string   `json:"licensedBy"`
+	AverageScore      *int      `json:"averageScore"`
+	Popularity        *int      `json:"popularity"`
+	Source            *string   `json:"source"`
+	CountryOfOrigin   *string   `json:"countryOfOrigin"`
+	Hashtag           *string   `json:"hashtag"`
+	Trailer           *string   `json:"trailer"`
+	UpdatedAt         *int      `json:"updatedAt"`
+	CoverImage        *string   `json:"coverImage"`
+	BannerImage       *string   `json:"bannerImage"`
+	Characters        []*string `json:"characters"`
+	Staff             []*string `json:"staff"`
+	Studios           []*string `json:"studios"`
+	NextAiringEpisode []*string `json:"nextAiringEpisode"`
+	ExternalLinks     []*string `json:"externalLinks"`
+}
+
 type AnimeTitle struct {
 	ID            string  `json:"id"`
 	UserPreferred *string `json:"userPreferred"`
@@ -55,40 +89,6 @@ type MediaTrailer struct {
 	ID        string  `json:"id"`
 	Site      *string `json:"site"`
 	Thumbnail *string `json:"thumbnail"`
-}
-
-type NewAnime struct {
-	Title             string    `json:"title"`
-	Description       *string   `json:"description"`
-	StartDate         *string   `json:"startDate"`
-	EndDate           *string   `json:"endDate"`
-	Season            *string   `json:"season"`
-	SeasonYear        *int      `json:"seasonYear"`
-	Type              *string   `json:"type"`
-	Format            *string   `json:"format"`
-	Status            *string   `json:"status"`
-	Episodes          *int      `json:"episodes"`
-	Duration          *string   `json:"duration"`
-	IsAdult           *bool     `json:"isAdult"`
-	Genre             *string   `json:"genre"`
-	Tag               []*string `json:"tag"`
-	OnList            *bool     `json:"onList"`
-	IsLicensed        *bool     `json:"isLicensed"`
-	LicensedBy        *string   `json:"licensedBy"`
-	AverageScore      *int      `json:"averageScore"`
-	Popularity        *int      `json:"popularity"`
-	Source            *string   `json:"source"`
-	CountryOfOrigin   *string   `json:"countryOfOrigin"`
-	Hashtag           *string   `json:"hashtag"`
-	Trailer           *string   `json:"trailer"`
-	UpdatedAt         *int      `json:"updatedAt"`
-	CoverImage        *string   `json:"coverImage"`
-	BannerImage       *string   `json:"bannerImage"`
-	Characters        []*string `json:"characters"`
-	Staff             []*string `json:"staff"`
-	Studios           []*string `json:"studios"`
-	NextAiringEpisode []*string `json:"nextAiringEpisode"`
-	ExternalLinks     []*string `json:"externalLinks"`
 }
 
 type AnimeFormat string

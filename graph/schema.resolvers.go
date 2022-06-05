@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"localtracker/graph/generated"
 	"localtracker/graph/model"
-	"math/rand"
 )
 
 func (r *animeResolver) Title(ctx context.Context, obj *model.Anime) (*model.AnimeTitle, error) {
@@ -16,6 +15,10 @@ func (r *animeResolver) Title(ctx context.Context, obj *model.Anime) (*model.Ani
 }
 
 func (r *animeResolver) Synonyms(ctx context.Context, obj *model.Anime) ([]*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *animeResolver) Description(ctx context.Context, obj *model.Anime) (*string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -44,6 +47,10 @@ func (r *animeResolver) Format(ctx context.Context, obj *model.Anime) (*model.An
 }
 
 func (r *animeResolver) Status(ctx context.Context, obj *model.Anime) (*model.MediaStatus, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *animeResolver) Episodes(ctx context.Context, obj *model.Anime) (*int, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -131,17 +138,55 @@ func (r *animeResolver) ExternalLinks(ctx context.Context, obj *model.Anime) ([]
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateAnime(ctx context.Context, input model.NewAnime) (*model.Anime, error) {
-	anime := &model.Anime{
-		Title: input.Title,
-		ID:    fmt.Sprintf("T%d", rand.Int()),
+func (r *mutationResolver) CreateAnime(ctx context.Context, input model.AnimeInput) (*model.Anime, error) {
+	anime, err := r.AnimeRepository.CreateAnime(&input)
+	animeCreated := &model.Anime{
+		ID:    anime.ID,
+		Title: anime.Title,
 	}
-	r.animes = append(r.animes, anime)
-	return anime, nil
+	if err != nil {
+		return nil, err
+	}
+	return animeCreated, nil
 }
 
-func (r *queryResolver) Animes(ctx context.Context) ([]*model.Anime, error) {
-	return r.animes, nil
+func (r *mutationResolver) UpdateAnime(ctx context.Context, id int, input model.AnimeInput) (string, error) {
+	err := r.AnimeRepository.UpdateAnime(&input, id)
+	if err != nil {
+		return "nil", err
+	}
+	successMessage := "successfully updated"
+
+	return successMessage, nil
+}
+
+func (r *mutationResolver) DeleteAnime(ctx context.Context, id int) (string, error) {
+	err := r.AnimeRepository.DeleteAnime(id)
+	if err != nil {
+		return "", err
+	}
+	successMessage := "successfully deleted"
+	return successMessage, nil
+}
+
+func (r *queryResolver) GetAllAnimes(ctx context.Context) ([]*model.Anime, error) {
+	books, err := r.AnimeRepository.GetAllAnimes()
+	if err != nil {
+		return nil, err
+	}
+	return books, nil
+}
+
+func (r *queryResolver) GetOneAnime(ctx context.Context, id int) (*model.Anime, error) {
+	anime, err := r.AnimeRepository.GetOneAnime(id)
+	selectedAnime := &model.Anime{
+		ID:    anime.ID,
+		Title: anime.Title,
+	}
+	if err != nil {
+		return nil, err
+	}
+	return selectedAnime, nil
 }
 
 // Anime returns generated.AnimeResolver implementation.

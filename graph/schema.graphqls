@@ -1,9 +1,12 @@
 type Query {
-  animes: [Anime!]!
+  GetAllAnimes: [Anime!]!
+  GetOneAnime(id: Int!): Anime!
 }
 
 type Mutation {
-  createAnime(input: NewAnime!): Anime!
+  CreateAnime(input: AnimeInput!): Anime!
+  UpdateAnime(id: Int!, input: AnimeInput!): String!
+  DeleteAnime(id: Int!): String!
 }
 
 ### SHARED TYPES ###
@@ -391,7 +394,7 @@ enum AnimeFormat {
   ONA
 }
 
-input NewAnime {
+input AnimeInput {
   title: String!
   description: String
   startDate: String
