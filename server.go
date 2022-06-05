@@ -1,8 +1,8 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
+	"localtracker/app/database"
+	"localtracker/app/repository"
 	"localtracker/graph"
 	"localtracker/graph/generated"
 	"log"
@@ -11,49 +11,34 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	_ "github.com/lib/pq"
-)
-
-const (
-	DBhost     = "localhost"
-	DBport     = 5432
-	DBuser     = "postgres"
-	DBpassword = "postgres"
-	DBname     = "localtracker"
+	"github.com/joho/godotenv"
 )
 
 const defaultPort = "8080"
 
-func initDB() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		DBhost, DBport, DBuser, DBpassword, DBname)
-
-	db, err := sql.Open("postgres", psqlInfo)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Successfully connected!")
-}
-
 func main() {
-	initDB()
-
+	godotenv.Load()
+	config := &database.Config{
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		Password: os.Getenv("DB_PASS"),
+		User:     os.Getenv("DB_USER"),
+		SSLMode:  os.Getenv("DB_SSLMODE"),
+		DBName:   os.Getenv("DB_NAME"),
+	}
+	db, err := database.NewConnection(config)
+	if err != nil {
+		panic(err)
+	}
+	database.Migrate(db)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
-
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	repo := repository.NewAnimeService(db)
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
+		AnimeRepository: repo,
+	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
