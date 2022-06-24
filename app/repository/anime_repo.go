@@ -27,7 +27,7 @@ func NewAnimeService(db *gorm.DB) *AnimeService {
 
 func (b *AnimeService) CreateAnime(animeInput *model.AnimeInput) (*models.Anime, error) {
 	anime := &models.Anime{
-		Title: animeInput.Title,
+		Title: animeInput.Title.UserPreferred,
 	}
 	err := b.Db.Create(&anime).Error
 
@@ -37,7 +37,8 @@ func (b *AnimeService) CreateAnime(animeInput *model.AnimeInput) (*models.Anime,
 func (b *AnimeService) UpdateAnime(animeInput *model.AnimeInput, id int) error {
 	anime := models.Anime{
 		ID:    id,
-		Title: animeInput.Title}
+		Title: animeInput.Title.UserPreferred,
+	}
 	err := b.Db.Model(&anime).Where("id = ?", id).Updates(anime).Error
 
 	return err
