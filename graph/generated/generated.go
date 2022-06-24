@@ -105,6 +105,7 @@ type ComplexityRoot struct {
 
 	MediaCoverImage struct {
 		Color      func(childComplexity int) int
+		Default    func(childComplexity int) int
 		ExtraLarge func(childComplexity int) int
 		ID         func(childComplexity int) int
 		Large      func(childComplexity int) int
@@ -530,6 +531,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MediaCoverImage.Color(childComplexity), true
 
+	case "MediaCoverImage.default":
+		if e.complexity.MediaCoverImage.Default == nil {
+			break
+		}
+
+		return e.complexity.MediaCoverImage.Default(childComplexity), true
+
 	case "MediaCoverImage.extraLarge":
 		if e.complexity.MediaCoverImage.ExtraLarge == nil {
 			break
@@ -691,7 +699,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputAiringScheduleInput,
 		ec.unmarshalInputAnimeInput,
+		ec.unmarshalInputAnimeTitleInput,
+		ec.unmarshalInputFuzzyDateInput,
+		ec.unmarshalInputMediaCoverImageInput,
+		ec.unmarshalInputMediaExternalLinkInput,
+		ec.unmarshalInputMediaTagInput,
+		ec.unmarshalInputMediaTrailerInput,
 	)
 	first := true
 
@@ -767,25 +782,26 @@ type Mutation {
 
 type MediaTrailer {
   id: ID!
-  site: String
+  site: String!
   thumbnail: String
 }
 
 type MediaTag {
   id: ID!
-  name: String
+  name: String!
   description: String
-  isAdult: Boolean
+  isAdult: Boolean!
 }
 
 type MediaExternalLink {
   id: ID!
-  url: String
+  url: String!
   site: String
 }
 
 type MediaCoverImage {
   id: ID!
+  default: String!
   extraLarge: String
   large: String
   medium: String
@@ -796,14 +812,14 @@ type AiringSchedule {
   id: ID!
   airingAt: Int
   timeUntilAiring: Int
-  episode: Int
+  episode: Int!
 }
 
 type FuzzyDate {
   id: ID!
-  year: Int
-  month: Int
-  day: Int
+  year: Int!
+  month: Int!
+  day: Int!
 }
 
 enum MediaType {
@@ -1089,6 +1105,29 @@ enum CountryCode {
 
 ### ANIME ###
 
+type AnimeTitle {
+  id: ID!
+  userPreferred: String
+  romaji: String
+  english: String
+  native: String
+}
+
+enum AnimeSeason {
+  WINTER
+  SPRING
+  SUMMER
+  FALL
+}
+
+enum AnimeFormat {
+  TV
+  TV_SHORT
+  SPECIAL
+  OVA
+  ONA
+}
+
 type Anime {
   id: ID!
   title: AnimeTitle!
@@ -1125,61 +1164,86 @@ type Anime {
   externalLinks: [MediaExternalLink]
 }
 
-type AnimeTitle {
-  id: ID!
-  userPreferred: String
+### SHARED INPUTS ###
+
+input FuzzyDateInput {
+  year: Int!
+  month: Int!
+  day: Int!
+}
+
+input MediaTagInput {
+  name: String!
+  description: String
+  isAdult: Boolean! = false
+}
+
+input MediaTrailerInput {
+  site: String!
+  thumbnail: String
+}
+
+input MediaCoverImageInput {
+  default: String!
+  extraLarge: String
+  large: String
+  medium: String
+  color: String
+}
+
+input AiringScheduleInput {
+  airingAt: Int
+  timeUntilAiring: Int
+  episode: Int!
+}
+
+input MediaExternalLinkInput {
+  url: String!
+  site: String
+}
+
+### ANIME INPUTS ###
+
+input AnimeTitleInput {
+  userPreferred: String!
   romaji: String
   english: String
   native: String
 }
 
-enum AnimeSeason {
-  WINTER
-  SPRING
-  SUMMER
-  FALL
-}
-
-enum AnimeFormat {
-  TV
-  TV_SHORT
-  SPECIAL
-  OVA
-  ONA
-}
-
 input AnimeInput {
-  title: String!
+  title: AnimeTitleInput!
+  synonyms: [String]
   description: String
   startDate: String
   endDate: String
-  season: String
+  season: AnimeSeason
   seasonYear: Int
-  type: String
-  format: String
-  status: String
+  type: MediaType
+  format: AnimeFormat
+  status: MediaStatus
   episodes: Int
   duration: String
   isAdult: Boolean
   genre: String
-  tag: [String]
+  tag: [MediaTagInput]
   onList: Boolean
   isLicensed: Boolean
   licensedBy: String
   averageScore: Int
   popularity: Int
-  source: String
+  source: MediaSource
   countryOfOrigin: String
   hashtag: String
   trailer: String
   updatedAt: Int
-  coverImage: String
+  coverImage: MediaCoverImageInput
   bannerImage: String
   characters: [String]
   staff: [String]
   studios: [String]
   nextAiringEpisode: [String]
-  externalLinks: [String]
+  externalLinks: [MediaExternalLinkInput]
 }
 `, BuiltIn: false},
 }
@@ -1458,11 +1522,14 @@ func (ec *executionContext) _AiringSchedule_episode(ctx context.Context, field g
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AiringSchedule_episode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2638,6 +2705,8 @@ func (ec *executionContext) fieldContext_Anime_coverImage(ctx context.Context, f
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_MediaCoverImage_id(ctx, field)
+			case "default":
+				return ec.fieldContext_MediaCoverImage_default(ctx, field)
 			case "extraLarge":
 				return ec.fieldContext_MediaCoverImage_extraLarge(ctx, field)
 			case "large":
@@ -3190,11 +3259,14 @@ func (ec *executionContext) _FuzzyDate_year(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FuzzyDate_year(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3231,11 +3303,14 @@ func (ec *executionContext) _FuzzyDate_month(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FuzzyDate_month(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3272,11 +3347,14 @@ func (ec *executionContext) _FuzzyDate_day(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FuzzyDate_day(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3331,6 +3409,50 @@ func (ec *executionContext) fieldContext_MediaCoverImage_id(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MediaCoverImage_default(ctx context.Context, field graphql.CollectedField, obj *model.MediaCoverImage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MediaCoverImage_default(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Default, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MediaCoverImage_default(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MediaCoverImage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3565,11 +3687,14 @@ func (ec *executionContext) _MediaExternalLink_url(ctx context.Context, field gr
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MediaExternalLink_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3691,11 +3816,14 @@ func (ec *executionContext) _MediaTag_name(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MediaTag_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3773,11 +3901,14 @@ func (ec *executionContext) _MediaTag_isAdult(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MediaTag_isAdult(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3858,11 +3989,14 @@ func (ec *executionContext) _MediaTrailer_site(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MediaTrailer_site(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6289,6 +6423,45 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAiringScheduleInput(ctx context.Context, obj interface{}) (model.AiringScheduleInput, error) {
+	var it model.AiringScheduleInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "airingAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("airingAt"))
+			it.AiringAt, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "timeUntilAiring":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("timeUntilAiring"))
+			it.TimeUntilAiring, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "episode":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("episode"))
+			it.Episode, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj interface{}) (model.AnimeInput, error) {
 	var it model.AnimeInput
 	asMap := map[string]interface{}{}
@@ -6302,7 +6475,15 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			it.Title, err = ec.unmarshalNAnimeTitleInput2ᚖlocaltrackerᚋgraphᚋmodelᚐAnimeTitleInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "synonyms":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("synonyms"))
+			it.Synonyms, err = ec.unmarshalOString2ᚕᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6334,7 +6515,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("season"))
-			it.Season, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.Season, err = ec.unmarshalOAnimeSeason2ᚖlocaltrackerᚋgraphᚋmodelᚐAnimeSeason(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6350,7 +6531,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
-			it.Type, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.Type, err = ec.unmarshalOMediaType2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6358,7 +6539,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("format"))
-			it.Format, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.Format, err = ec.unmarshalOAnimeFormat2ᚖlocaltrackerᚋgraphᚋmodelᚐAnimeFormat(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6366,7 +6547,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.Status, err = ec.unmarshalOMediaStatus2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6406,7 +6587,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tag"))
-			it.Tag, err = ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			it.Tag, err = ec.unmarshalOMediaTagInput2ᚕᚖlocaltrackerᚋgraphᚋmodelᚐMediaTagInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6454,7 +6635,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("source"))
-			it.Source, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.Source, err = ec.unmarshalOMediaSource2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaSource(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6494,7 +6675,7 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("coverImage"))
-			it.CoverImage, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.CoverImage, err = ec.unmarshalOMediaCoverImageInput2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaCoverImageInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6542,7 +6723,253 @@ func (ec *executionContext) unmarshalInputAnimeInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			it.ExternalLinks, err = ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			it.ExternalLinks, err = ec.unmarshalOMediaExternalLinkInput2ᚕᚖlocaltrackerᚋgraphᚋmodelᚐMediaExternalLinkInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAnimeTitleInput(ctx context.Context, obj interface{}) (model.AnimeTitleInput, error) {
+	var it model.AnimeTitleInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "userPreferred":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userPreferred"))
+			it.UserPreferred, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "romaji":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("romaji"))
+			it.Romaji, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "english":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("english"))
+			it.English, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "native":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("native"))
+			it.Native, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputFuzzyDateInput(ctx context.Context, obj interface{}) (model.FuzzyDateInput, error) {
+	var it model.FuzzyDateInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "year":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("year"))
+			it.Year, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "month":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("month"))
+			it.Month, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "day":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
+			it.Day, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputMediaCoverImageInput(ctx context.Context, obj interface{}) (model.MediaCoverImageInput, error) {
+	var it model.MediaCoverImageInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "default":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("default"))
+			it.Default, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "extraLarge":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("extraLarge"))
+			it.ExtraLarge, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "large":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("large"))
+			it.Large, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "medium":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medium"))
+			it.Medium, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "color":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("color"))
+			it.Color, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputMediaExternalLinkInput(ctx context.Context, obj interface{}) (model.MediaExternalLinkInput, error) {
+	var it model.MediaExternalLinkInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "url":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
+			it.URL, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "site":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("site"))
+			it.Site, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputMediaTagInput(ctx context.Context, obj interface{}) (model.MediaTagInput, error) {
+	var it model.MediaTagInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["isAdult"]; !present {
+		asMap["isAdult"] = false
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			it.Description, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isAdult":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isAdult"))
+			it.IsAdult, err = ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputMediaTrailerInput(ctx context.Context, obj interface{}) (model.MediaTrailerInput, error) {
+	var it model.MediaTrailerInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "site":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("site"))
+			it.Site, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "thumbnail":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("thumbnail"))
+			it.Thumbnail, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6589,6 +7016,9 @@ func (ec *executionContext) _AiringSchedule(ctx context.Context, sel ast.Selecti
 
 			out.Values[i] = ec._AiringSchedule_episode(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7240,14 +7670,23 @@ func (ec *executionContext) _FuzzyDate(ctx context.Context, sel ast.SelectionSet
 
 			out.Values[i] = ec._FuzzyDate_year(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "month":
 
 			out.Values[i] = ec._FuzzyDate_month(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "day":
 
 			out.Values[i] = ec._FuzzyDate_day(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7272,6 +7711,13 @@ func (ec *executionContext) _MediaCoverImage(ctx context.Context, sel ast.Select
 		case "id":
 
 			out.Values[i] = ec._MediaCoverImage_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "default":
+
+			out.Values[i] = ec._MediaCoverImage_default(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -7324,6 +7770,9 @@ func (ec *executionContext) _MediaExternalLink(ctx context.Context, sel ast.Sele
 
 			out.Values[i] = ec._MediaExternalLink_url(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "site":
 
 			out.Values[i] = ec._MediaExternalLink_site(ctx, field, obj)
@@ -7360,6 +7809,9 @@ func (ec *executionContext) _MediaTag(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._MediaTag_name(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "description":
 
 			out.Values[i] = ec._MediaTag_description(ctx, field, obj)
@@ -7368,6 +7820,9 @@ func (ec *executionContext) _MediaTag(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = ec._MediaTag_isAdult(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7400,6 +7855,9 @@ func (ec *executionContext) _MediaTrailer(ctx context.Context, sel ast.Selection
 
 			out.Values[i] = ec._MediaTrailer_site(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "thumbnail":
 
 			out.Values[i] = ec._MediaTrailer_thumbnail(ctx, field, obj)
@@ -7955,6 +8413,11 @@ func (ec *executionContext) marshalNAnimeTitle2ᚖlocaltrackerᚋgraphᚋmodel�
 	return ec._AnimeTitle(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNAnimeTitleInput2ᚖlocaltrackerᚋgraphᚋmodelᚐAnimeTitleInput(ctx context.Context, v interface{}) (*model.AnimeTitleInput, error) {
+	res, err := ec.unmarshalInputAnimeTitleInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8419,6 +8882,14 @@ func (ec *executionContext) marshalOMediaCoverImage2ᚖlocaltrackerᚋgraphᚋmo
 	return ec._MediaCoverImage(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOMediaCoverImageInput2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaCoverImageInput(ctx context.Context, v interface{}) (*model.MediaCoverImageInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputMediaCoverImageInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalOMediaExternalLink2ᚕᚖlocaltrackerᚋgraphᚋmodelᚐMediaExternalLink(ctx context.Context, sel ast.SelectionSet, v []*model.MediaExternalLink) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -8465,6 +8936,34 @@ func (ec *executionContext) marshalOMediaExternalLink2ᚖlocaltrackerᚋgraphᚋ
 		return graphql.Null
 	}
 	return ec._MediaExternalLink(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOMediaExternalLinkInput2ᚕᚖlocaltrackerᚋgraphᚋmodelᚐMediaExternalLinkInput(ctx context.Context, v interface{}) ([]*model.MediaExternalLinkInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.MediaExternalLinkInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOMediaExternalLinkInput2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaExternalLinkInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOMediaExternalLinkInput2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaExternalLinkInput(ctx context.Context, v interface{}) (*model.MediaExternalLinkInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputMediaExternalLinkInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOMediaSource2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaSource(ctx context.Context, v interface{}) (*model.MediaSource, error) {
@@ -8545,6 +9044,34 @@ func (ec *executionContext) marshalOMediaTag2ᚖlocaltrackerᚋgraphᚋmodelᚐM
 		return graphql.Null
 	}
 	return ec._MediaTag(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOMediaTagInput2ᚕᚖlocaltrackerᚋgraphᚋmodelᚐMediaTagInput(ctx context.Context, v interface{}) ([]*model.MediaTagInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.MediaTagInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOMediaTagInput2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaTagInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOMediaTagInput2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaTagInput(ctx context.Context, v interface{}) (*model.MediaTagInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputMediaTagInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOMediaTrailer2ᚖlocaltrackerᚋgraphᚋmodelᚐMediaTrailer(ctx context.Context, sel ast.SelectionSet, v *model.MediaTrailer) graphql.Marshaler {

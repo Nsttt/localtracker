@@ -12,41 +12,48 @@ type AiringSchedule struct {
 	ID              string `json:"id"`
 	AiringAt        *int   `json:"airingAt"`
 	TimeUntilAiring *int   `json:"timeUntilAiring"`
-	Episode         *int   `json:"episode"`
+	Episode         int    `json:"episode"`
+}
+
+type AiringScheduleInput struct {
+	AiringAt        *int `json:"airingAt"`
+	TimeUntilAiring *int `json:"timeUntilAiring"`
+	Episode         int  `json:"episode"`
 }
 
 type AnimeInput struct {
-	Title             string    `json:"title"`
-	Description       *string   `json:"description"`
-	StartDate         *string   `json:"startDate"`
-	EndDate           *string   `json:"endDate"`
-	Season            *string   `json:"season"`
-	SeasonYear        *int      `json:"seasonYear"`
-	Type              *string   `json:"type"`
-	Format            *string   `json:"format"`
-	Status            *string   `json:"status"`
-	Episodes          *int      `json:"episodes"`
-	Duration          *string   `json:"duration"`
-	IsAdult           *bool     `json:"isAdult"`
-	Genre             *string   `json:"genre"`
-	Tag               []*string `json:"tag"`
-	OnList            *bool     `json:"onList"`
-	IsLicensed        *bool     `json:"isLicensed"`
-	LicensedBy        *string   `json:"licensedBy"`
-	AverageScore      *int      `json:"averageScore"`
-	Popularity        *int      `json:"popularity"`
-	Source            *string   `json:"source"`
-	CountryOfOrigin   *string   `json:"countryOfOrigin"`
-	Hashtag           *string   `json:"hashtag"`
-	Trailer           *string   `json:"trailer"`
-	UpdatedAt         *int      `json:"updatedAt"`
-	CoverImage        *string   `json:"coverImage"`
-	BannerImage       *string   `json:"bannerImage"`
-	Characters        []*string `json:"characters"`
-	Staff             []*string `json:"staff"`
-	Studios           []*string `json:"studios"`
-	NextAiringEpisode []*string `json:"nextAiringEpisode"`
-	ExternalLinks     []*string `json:"externalLinks"`
+	Title             *AnimeTitleInput          `json:"title"`
+	Synonyms          []*string                 `json:"synonyms"`
+	Description       *string                   `json:"description"`
+	StartDate         *string                   `json:"startDate"`
+	EndDate           *string                   `json:"endDate"`
+	Season            *AnimeSeason              `json:"season"`
+	SeasonYear        *int                      `json:"seasonYear"`
+	Type              *MediaType                `json:"type"`
+	Format            *AnimeFormat              `json:"format"`
+	Status            *MediaStatus              `json:"status"`
+	Episodes          *int                      `json:"episodes"`
+	Duration          *string                   `json:"duration"`
+	IsAdult           *bool                     `json:"isAdult"`
+	Genre             *string                   `json:"genre"`
+	Tag               []*MediaTagInput          `json:"tag"`
+	OnList            *bool                     `json:"onList"`
+	IsLicensed        *bool                     `json:"isLicensed"`
+	LicensedBy        *string                   `json:"licensedBy"`
+	AverageScore      *int                      `json:"averageScore"`
+	Popularity        *int                      `json:"popularity"`
+	Source            *MediaSource              `json:"source"`
+	CountryOfOrigin   *string                   `json:"countryOfOrigin"`
+	Hashtag           *string                   `json:"hashtag"`
+	Trailer           *string                   `json:"trailer"`
+	UpdatedAt         *int                      `json:"updatedAt"`
+	CoverImage        *MediaCoverImageInput     `json:"coverImage"`
+	BannerImage       *string                   `json:"bannerImage"`
+	Characters        []*string                 `json:"characters"`
+	Staff             []*string                 `json:"staff"`
+	Studios           []*string                 `json:"studios"`
+	NextAiringEpisode []*string                 `json:"nextAiringEpisode"`
+	ExternalLinks     []*MediaExternalLinkInput `json:"externalLinks"`
 }
 
 type AnimeTitle struct {
@@ -57,15 +64,37 @@ type AnimeTitle struct {
 	Native        *string `json:"native"`
 }
 
+type AnimeTitleInput struct {
+	UserPreferred string  `json:"userPreferred"`
+	Romaji        *string `json:"romaji"`
+	English       *string `json:"english"`
+	Native        *string `json:"native"`
+}
+
 type FuzzyDate struct {
 	ID    string `json:"id"`
-	Year  *int   `json:"year"`
-	Month *int   `json:"month"`
-	Day   *int   `json:"day"`
+	Year  int    `json:"year"`
+	Month int    `json:"month"`
+	Day   int    `json:"day"`
+}
+
+type FuzzyDateInput struct {
+	Year  int `json:"year"`
+	Month int `json:"month"`
+	Day   int `json:"day"`
 }
 
 type MediaCoverImage struct {
 	ID         string  `json:"id"`
+	Default    string  `json:"default"`
+	ExtraLarge *string `json:"extraLarge"`
+	Large      *string `json:"large"`
+	Medium     *string `json:"medium"`
+	Color      *string `json:"color"`
+}
+
+type MediaCoverImageInput struct {
+	Default    string  `json:"default"`
 	ExtraLarge *string `json:"extraLarge"`
 	Large      *string `json:"large"`
 	Medium     *string `json:"medium"`
@@ -74,20 +103,36 @@ type MediaCoverImage struct {
 
 type MediaExternalLink struct {
 	ID   string  `json:"id"`
-	URL  *string `json:"url"`
+	URL  string  `json:"url"`
+	Site *string `json:"site"`
+}
+
+type MediaExternalLinkInput struct {
+	URL  string  `json:"url"`
 	Site *string `json:"site"`
 }
 
 type MediaTag struct {
 	ID          string  `json:"id"`
-	Name        *string `json:"name"`
+	Name        string  `json:"name"`
 	Description *string `json:"description"`
-	IsAdult     *bool   `json:"isAdult"`
+	IsAdult     bool    `json:"isAdult"`
+}
+
+type MediaTagInput struct {
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
+	IsAdult     bool    `json:"isAdult"`
 }
 
 type MediaTrailer struct {
 	ID        string  `json:"id"`
-	Site      *string `json:"site"`
+	Site      string  `json:"site"`
+	Thumbnail *string `json:"thumbnail"`
+}
+
+type MediaTrailerInput struct {
+	Site      string  `json:"site"`
 	Thumbnail *string `json:"thumbnail"`
 }
 

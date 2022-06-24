@@ -13,25 +13,26 @@ type Mutation {
 
 type MediaTrailer {
   id: ID!
-  site: String
+  site: String!
   thumbnail: String
 }
 
 type MediaTag {
   id: ID!
-  name: String
+  name: String!
   description: String
-  isAdult: Boolean
+  isAdult: Boolean!
 }
 
 type MediaExternalLink {
   id: ID!
-  url: String
+  url: String!
   site: String
 }
 
 type MediaCoverImage {
   id: ID!
+  default: String!
   extraLarge: String
   large: String
   medium: String
@@ -42,14 +43,14 @@ type AiringSchedule {
   id: ID!
   airingAt: Int
   timeUntilAiring: Int
-  episode: Int
+  episode: Int!
 }
 
 type FuzzyDate {
   id: ID!
-  year: Int
-  month: Int
-  day: Int
+  year: Int!
+  month: Int!
+  day: Int!
 }
 
 enum MediaType {
@@ -335,6 +336,29 @@ enum CountryCode {
 
 ### ANIME ###
 
+type AnimeTitle {
+  id: ID!
+  userPreferred: String
+  romaji: String
+  english: String
+  native: String
+}
+
+enum AnimeSeason {
+  WINTER
+  SPRING
+  SUMMER
+  FALL
+}
+
+enum AnimeFormat {
+  TV
+  TV_SHORT
+  SPECIAL
+  OVA
+  ONA
+}
+
 type Anime {
   id: ID!
   title: AnimeTitle!
@@ -371,59 +395,84 @@ type Anime {
   externalLinks: [MediaExternalLink]
 }
 
-type AnimeTitle {
-  id: ID!
-  userPreferred: String
+### SHARED INPUTS ###
+
+input FuzzyDateInput {
+  year: Int!
+  month: Int!
+  day: Int!
+}
+
+input MediaTagInput {
+  name: String!
+  description: String
+  isAdult: Boolean! = false
+}
+
+input MediaTrailerInput {
+  site: String!
+  thumbnail: String
+}
+
+input MediaCoverImageInput {
+  default: String!
+  extraLarge: String
+  large: String
+  medium: String
+  color: String
+}
+
+input AiringScheduleInput {
+  airingAt: Int
+  timeUntilAiring: Int
+  episode: Int!
+}
+
+input MediaExternalLinkInput {
+  url: String!
+  site: String
+}
+
+### ANIME INPUTS ###
+
+input AnimeTitleInput {
+  userPreferred: String!
   romaji: String
   english: String
   native: String
 }
 
-enum AnimeSeason {
-  WINTER
-  SPRING
-  SUMMER
-  FALL
-}
-
-enum AnimeFormat {
-  TV
-  TV_SHORT
-  SPECIAL
-  OVA
-  ONA
-}
-
 input AnimeInput {
-  title: String!
+  title: AnimeTitleInput!
+  synonyms: [String]
   description: String
   startDate: String
   endDate: String
-  season: String
+  season: AnimeSeason
   seasonYear: Int
-  type: String
-  format: String
-  status: String
+  type: MediaType
+  format: AnimeFormat
+  status: MediaStatus
   episodes: Int
   duration: String
   isAdult: Boolean
   genre: String
-  tag: [String]
+  tag: [MediaTagInput]
   onList: Boolean
   isLicensed: Boolean
   licensedBy: String
   averageScore: Int
   popularity: Int
-  source: String
+  source: MediaSource
   countryOfOrigin: String
   hashtag: String
   trailer: String
   updatedAt: Int
-  coverImage: String
+  coverImage: MediaCoverImageInput
   bannerImage: String
   characters: [String]
   staff: [String]
   studios: [String]
   nextAiringEpisode: [String]
-  externalLinks: [String]
+  externalLinks: [MediaExternalLinkInput]
 }
